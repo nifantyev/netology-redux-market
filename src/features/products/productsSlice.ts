@@ -50,9 +50,16 @@ const productsSlice = createSlice({
       const { name, value } = action.payload;
       state.productForm = { ...state.productForm, [name]: value };
     },
+    clearProductForm(state) {
+      state.productForm.name = '';
+      state.productForm.photo = '';
+      state.productForm.price = 0;
+      state.productForm.discount = 0;
+    },
   },
 });
 
-export const { createProduct, updateProductForm } = productsSlice.actions;
+export const { createProduct, updateProductForm, clearProductForm } =
+  productsSlice.actions;
 
 export default productsSlice.reducer;
