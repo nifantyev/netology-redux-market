@@ -5,7 +5,8 @@ interface Product {
   name: string;
   photo: string;
   price: number;
-  discount: number;
+  hasDiscount: boolean;
+  discountPrice?: number;
 }
 
 export interface ProductsState {
@@ -14,7 +15,8 @@ export interface ProductsState {
     name: string;
     photo: string;
     price: number;
-    discount: number;
+    hasDiscount: boolean;
+    discountPrice?: number;
   };
 }
 
@@ -24,7 +26,8 @@ const initialState: ProductsState = {
     name: '',
     photo: '',
     price: 0,
-    discount: 0,
+    hasDiscount: false,
+    discountPrice: undefined,
   },
 };
 
@@ -54,7 +57,8 @@ const productsSlice = createSlice({
       state.productForm.name = '';
       state.productForm.photo = '';
       state.productForm.price = 0;
-      state.productForm.discount = 0;
+      state.productForm.hasDiscount = false;
+      state.productForm.discountPrice = undefined;
     },
   },
 });

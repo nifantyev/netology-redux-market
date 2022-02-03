@@ -11,7 +11,18 @@ export default function ProductForm() {
   const { productForm } = useAppSelector((store) => store.products);
 
   const handleChange = (event: any) => {
-    const { name, value } = event.target;
+    const { name } = event.target;
+    let value;
+    if (event.target.type.toLowerCase() === 'checkbox') {
+      value = event.target.checked;
+    } else {
+      value = event.target.value;
+    }
+
+    if (name === 'price' || name === 'discountPrice') {
+      value = Number(value);
+    }
+
     dispatch(
       updateProductForm({
         name,
@@ -28,7 +39,10 @@ export default function ProductForm() {
         name: productForm.name,
         photo: productForm.photo,
         price: productForm.price,
-        discount: productForm.discount,
+        hasDiscount: productForm.hasDiscount,
+        discountPrice: productForm.hasDiscount
+          ? productForm.discountPrice
+          : undefined,
       })
     );
     dispatch(clearProductForm());
@@ -69,31 +83,41 @@ export default function ProductForm() {
         <input
           className="form-control"
           type="number"
-          min="0"
-          step="0.01"
           name="price"
           id="price"
           value={productForm.price}
           onChange={handleChange}
         />
       </div>
-
-      <div className="mb-3">
-        <label htmlFor="discount" className="form-label">
-          Скидка (%)
-        </label>
+      <div className="mb-3 form-check">
         <input
-          className="form-control"
-          type="number"
-          min="0"
-          max="100"
-          step="1"
-          name="discount"
-          id="discount"
-          value={productForm.discount}
+          className="form-check-input"
+          type="checkbox"
+          value=""
+          id="hasDiscount"
+          name="hasDiscount"
+          checked={productForm.hasDiscount}
           onChange={handleChange}
         />
+        <label className="form-check-label" htmlFor="hasDiscount">
+          Есть скидка
+        </label>
       </div>
+      {productForm.hasDiscount && (
+        <div className="mb-3">
+          <label htmlFor="discountPrice" className="form-label">
+            Цена по скидке
+          </label>
+          <input
+            className="form-control"
+            type="number"
+            name="discountPrice"
+            id="discountPrice"
+            value={productForm.discountPrice}
+            onChange={handleChange}
+          />
+        </div>
+      )}
       <div className="mb-3">
         <button type="submit" className="btn btn-primary">
           Сохранить
