@@ -42,7 +42,7 @@ export default function ProductForm() {
         hasDiscount: productForm.hasDiscount,
         discountPrice: productForm.hasDiscount
           ? productForm.discountPrice
-          : undefined,
+          : productForm.price,
       })
     );
     dispatch(clearProductForm());

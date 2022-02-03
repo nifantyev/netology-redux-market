@@ -45,10 +45,9 @@ export default function ProductCard(props: ProductCardProps) {
   const locale = 'ru-RU';
   const currency = 'RUB';
 
-  const discountPct =
-    hasDiscount && discountPrice
-      ? Math.round((100 * (price - discountPrice)) / price)
-      : undefined;
+  const discountPct = hasDiscount
+    ? Math.round((100 * (price - discountPrice)) / price)
+    : undefined;
 
   const maxNameLength = 25;
 
@@ -67,7 +66,7 @@ export default function ProductCard(props: ProductCardProps) {
         <div className={styles.price__currency}>
           {getCurrencySymbol(locale, currency)}
         </div>
-        {hasDiscount && discountPrice && (
+        {hasDiscount && (
           <div className={styles.discounted}>
             {formatCurrency(price, locale, currency, 0, false)}
           </div>
