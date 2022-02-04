@@ -1,18 +1,31 @@
-import React from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  createProduct,
-  updateProductForm,
-  clearProductForm,
-} from './productsSlice';
+import React, { useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { createProduct } from './productsSlice';
+
+interface FormState {
+  name: string;
+  photo: string;
+  price: number;
+  hasDiscount: boolean;
+  discountPrice: number;
+}
+
+const initialFormState: FormState = {
+  name: '',
+  photo: '',
+  price: 0,
+  hasDiscount: false,
+  discountPrice: 0,
+};
 
 export default function ProductForm() {
   const dispatch = useAppDispatch();
-  const { productForm } = useAppSelector((store) => store.products);
+
+  const [form, setForm] = useState<FormState>(initialFormState);
 
   const handleChange = (event: any) => {
     const { name } = event.target;
-    let value;
+    let value: number | string = '';
     if (event.target.type.toLowerCase() === 'checkbox') {
       value = event.target.checked;
     } else {
@@ -23,12 +36,7 @@ export default function ProductForm() {
       value = Number(value);
     }
 
-    dispatch(
-      updateProductForm({
-        name,
-        value,
-      })
-    );
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const handleSave = (event: any) => {
@@ -36,16 +44,14 @@ export default function ProductForm() {
     dispatch(
       createProduct({
         id: 0,
-        name: productForm.name,
-        photo: productForm.photo,
-        price: productForm.price,
-        hasDiscount: productForm.hasDiscount,
-        discountPrice: productForm.hasDiscount
-          ? productForm.discountPrice
-          : productForm.price,
+        name: form.name,
+        photo: form.photo,
+        price: form.price,
+        hasDiscount: form.hasDiscount,
+        discountPrice: form.hasDiscount ? form.discountPrice : form.price,
       })
     );
-    dispatch(clearProductForm());
+    setForm(initialFormState);
   };
 
   return (
@@ -59,7 +65,7 @@ export default function ProductForm() {
           type="text"
           name="name"
           id="name"
-          value={productForm.name}
+          value={form.name}
           onChange={handleChange}
         />
       </div>
@@ -72,7 +78,7 @@ export default function ProductForm() {
           type="text"
           name="photo"
           id="photo"
-          value={productForm.photo}
+          value={form.photo}
           onChange={handleChange}
         />
       </div>
@@ -85,7 +91,7 @@ export default function ProductForm() {
           type="number"
           name="price"
           id="price"
-          value={productForm.price}
+          value={form.price}
           onChange={handleChange}
         />
       </div>
@@ -96,14 +102,14 @@ export default function ProductForm() {
           value=""
           id="hasDiscount"
           name="hasDiscount"
-          checked={productForm.hasDiscount}
+          checked={form.hasDiscount}
           onChange={handleChange}
         />
         <label className="form-check-label" htmlFor="hasDiscount">
           Есть скидка
         </label>
       </div>
-      {productForm.hasDiscount && (
+      {form.hasDiscount && (
         <div className="mb-3">
           <label htmlFor="discountPrice" className="form-label">
             Цена по скидке
@@ -113,7 +119,7 @@ export default function ProductForm() {
             type="number"
             name="discountPrice"
             id="discountPrice"
-            value={productForm.discountPrice}
+            value={form.discountPrice}
             onChange={handleChange}
           />
         </div>

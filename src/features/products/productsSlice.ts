@@ -11,24 +11,10 @@ export interface Product {
 
 export interface ProductsState {
   products: Product[];
-  productForm: {
-    name: string;
-    photo: string;
-    price: number;
-    hasDiscount: boolean;
-    discountPrice: number;
-  };
 }
 
 const initialState: ProductsState = {
   products: [],
-  productForm: {
-    name: '',
-    photo: '',
-    price: 0,
-    hasDiscount: false,
-    discountPrice: 0,
-  },
 };
 
 const productsSlice = createSlice({
@@ -46,24 +32,9 @@ const productsSlice = createSlice({
           : 1;
       state.products.push(product);
     },
-    updateProductForm(
-      state,
-      action: PayloadAction<{ name: string; value: string | number }>
-    ) {
-      const { name, value } = action.payload;
-      state.productForm = { ...state.productForm, [name]: value };
-    },
-    clearProductForm(state) {
-      state.productForm.name = '';
-      state.productForm.photo = '';
-      state.productForm.price = 0;
-      state.productForm.hasDiscount = false;
-      state.productForm.discountPrice = 0;
-    },
   },
 });
 
-export const { createProduct, updateProductForm, clearProductForm } =
-  productsSlice.actions;
+export const { createProduct } = productsSlice.actions;
 
 export default productsSlice.reducer;
